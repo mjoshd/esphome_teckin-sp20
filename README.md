@@ -2,9 +2,7 @@
 
 Device links:
 
-[2-pack (Amazon)](https://www.amazon.com/gp/product/B079Q5W22B)
-
-[4-pack (Amazon)](https://www.amazon.com/gp/product/B07CVFD2KC)
+[6-pack (Amazon)](https://www.amazon.com/gp/product/B0773DFQJ9)
 
 <br>
 
