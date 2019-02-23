@@ -82,14 +82,23 @@ sensor:
       name: $friendly_name Current
     power:
       name: $friendly_name Power
+      id: power_monitor_value
       filters:
-        - lambda: return x / 2.2;
+        - lambda: return (x / 2.2);
     voltage:
       name: $friendly_name Voltage
     current_resistor: 0.001  # default 0.001
     voltage_divider: 910  # default 2351
     change_mode_every: 3  # default 8
     update_interval: 3s  # default 60s
+
+  - platform: total_daily_energy
+    # https://esphome.io/components/sensor/total_daily_energy.html
+    name: $friendly_name Total Daily Energy
+    power_id: power_monitor_value
+    filters:
+      - multiply: 0.001   # convert Wh to kWh
+    unit_of_measurement: kWh
 
 
 status_led:
