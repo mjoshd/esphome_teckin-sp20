@@ -1,6 +1,6 @@
 # Teckin SP20 (US version)
 
-Device links:	Device links:
+Device links:
 
  [2-pack (Amazon)](https://www.amazon.com/gp/product/B079Q5W22B)
 
