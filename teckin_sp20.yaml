@@ -32,8 +32,8 @@ substitutions:
 
 
 esphome:
-  # https://esphome.io/components/esphome
-  name: $device_name
+  # https://esphome.io/components/esphomeyaml
+  name: ${device_name}
   platform: ESP8266
   board: esp01_1m
 
@@ -43,7 +43,7 @@ wifi:
   ssid: !secret wifi_ssid
   password: !secret wifi_password
   manual_ip:
-    static_ip: $ip_address
+    static_ip: ${ip_address}
     gateway: !secret wifi_gateway
     subnet: !secret wifi_subnet
     dns1: !secret wifi_dns1
@@ -51,7 +51,7 @@ wifi:
     
 # web_server:
 #   port: 80
-  # https://esphome.io/components/web_server.html
+  # https://esphomelib.com/esphomeyaml/components/web_server.html
   
 
 logger:
@@ -59,14 +59,19 @@ logger:
 
 
 api:
-  password: !secret esphome_api_password
+  # password: !secret esphome_api_password
   # https://esphome.io/components/api
   
 
 ota:
   password: !secret esphome_ota_password
   # https://esphome.io/components/ota
-  
+
+
+time:
+  - platform: homeassistant
+    # https://esphome.io/components/time
+    id: homeassistant_time
 
 
 sensor:
@@ -79,14 +84,14 @@ sensor:
     cf_pin: GPIO5
     cf1_pin: GPIO14
     current:
-      name: $friendly_name Current
+      name: ${friendly_name} Current
     power:
-      name: $friendly_name Power
+      name: ${friendly_name} Power
       id: power_monitor_value
       filters:
         - lambda: return (x / 2.2);
     voltage:
-      name: $friendly_name Voltage
+      name: ${friendly_name} Voltage
     current_resistor: 0.001  # default 0.001
     voltage_divider: 910  # default 2351
     change_mode_every: 3  # default 8
@@ -94,7 +99,7 @@ sensor:
 
   - platform: total_daily_energy
     # https://esphome.io/components/sensor/total_daily_energy.html
-    name: $friendly_name Total Daily Energy
+    name: ${friendly_name} Total Daily Energy
     power_id: power_monitor_value
     filters:
       - multiply: 0.001   # convert Wh to kWh
@@ -120,7 +125,7 @@ output:
 light:
   # https://esphome.io/components/light/monochromatic.html
   - platform: monochromatic
-    name: $friendly_name Blue LED
+    name: ${friendly_name} Blue LED
     output: blue_led_output
     id: blue_led
     default_transition_length: 1ms # default 1s
@@ -133,7 +138,7 @@ binary_sensor:
     pin:
       number: GPIO13
     id: button
-    name: $friendly_name Button
+    name: ${friendly_name} Button
     on_press:
       - switch.toggle: relay_template
     internal: True
@@ -148,7 +153,7 @@ switch:
   # tie the led & relay operation together and report status based on relay state   
   - platform: template
     # https://esphome.io/components/switch/template.html
-    name: $friendly_name Relay
+    name: ${friendly_name}
     id: relay_template
     lambda: |-
       if (id(relay).state) {
