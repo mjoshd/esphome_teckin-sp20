@@ -93,7 +93,7 @@ time:
 status_led:
   # https://esphome.io/components/status_led
   pin:
-    number: GPIO0
+    number: GPIO0   # Red LED
     inverted: True
 
 
