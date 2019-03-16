@@ -1,11 +1,14 @@
-# Teckin SP20 (USA model)
-# GPIO13 = Button
-# GPIO4  = Relay
-# GPIO2  = Blue LED (inverted)
-# GPIO0  = Red LED (inverted)
-# GPIO12 = HLW8012 SEL Pin (inverted)
-# GPIO5  = HLW8012 CF Pin
-# GPIO14 = HLW8012 CF1 Pin
+# ##################################
+# Teckin SP20 Plug w/ power monitoring
+# ##################################
+# D3 GPIO0  Red LED (inverted)
+# D4 GPIO2  Blue LED (inverted)
+# D2 GPIO4  Relay
+# D1 GPIO5  HLW8012 CF Pin
+# D6 GPIO12 HLW8012 SEL Pin (inverted)
+# D7 GPIO13 Button (inverted)
+# D5 GPIO14 HLW8012 CF1 Pin
+# ##################################
 
 
 substitutions:
@@ -13,6 +16,8 @@ substitutions:
   device_name: teckin_sp20     # used internally.. e.g. living_room_lamp
   friendly_name: Teckin SP20   # displayed in HA.. e.g. Living Room Lamp
   ip_address: !secret teckin_sp20_ip
+  switch_icon: "mdi:flash-circle"
+  sensor_icon: "mdi:eye"
 
 
 esphome:
@@ -32,11 +37,11 @@ wifi:
     subnet: !secret wifi_subnet
     dns1: !secret wifi_dns1
 
-    
+
 # web_server:
 #   port: 80
   # https://esphomelib.com/esphomeyaml/components/web_server.html
-  
+
 
 logger:
   # https://esphome.io/components/logger
@@ -45,7 +50,7 @@ logger:
 api:
   password: !secret esphome_api_password
   # https://esphome.io/components/api
-  
+
 
 ota:
   password: !secret esphome_ota_password
@@ -55,7 +60,7 @@ ota:
 sensor:
   - platform: hlw8012
     # https://esphome.io/components/sensor/hlw8012.html
-    # current, power, voltage can all use sensor options shown at https://esphome.io/components/sensor/#config-sensor
+    # current, power, voltage can all use sensor options https://esphome.io/components/sensor/#config-sensor
     sel_pin: 
       number: GPIO12
       inverted: True
@@ -63,13 +68,16 @@ sensor:
     cf1_pin: GPIO14
     current:
       name: ${friendly_name} Current
+      icon: ${sensor_icon}
     power:
       name: ${friendly_name} Power
       id: ${device_name}_power
+      icon: ${sensor_icon}
       filters:
         - multiply: 0.4545
     voltage:
       name: ${friendly_name} Voltage
+      icon: ${sensor_icon}
     current_resistor: 0.001  # default 0.001
     voltage_divider: 910     # default 2351
     change_mode_every: 3     # default 8
@@ -79,6 +87,7 @@ sensor:
     # https://esphome.io/components/sensor/total_daily_energy.html
     name: ${friendly_name} Total Daily Energy
     power_id: ${device_name}_power
+    icon: ${sensor_icon}
     filters:
       - multiply: 0.001   # convert Wh to kWh
     unit_of_measurement: kWh
@@ -102,12 +111,13 @@ binary_sensor:
     # https://esphome.io/components/binary_sensor/gpio.html
     pin:
       number: GPIO13
+      inverted: True
     id: button
     name: ${friendly_name} Button
     on_press:
       - switch.toggle: relay
     internal: True
-      
+
 
 switch:
   - platform: gpio
@@ -116,11 +126,12 @@ switch:
     pin:
       number: GPIO2
       inverted: True
-    
+
   - platform: gpio
     # https://esphome.io/components/switch/gpio
     pin: GPIO4
     name: ${friendly_name}
+    icon: ${switch_icon}
     id: relay
     # Tie Blue LED to relay
     on_turn_on:
